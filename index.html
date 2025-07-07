@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>PANNEL - Free Fire MOD UI</title>
+  <style>
+    body {
+      background: url('https://i.imgur.com/XZwYfZV.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+    .panel {
+      background-color: rgba(0, 0, 0, 0.85);
+      width: 600px;
+      padding: 40px;
+      margin: 60px auto;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #00ffcc;
+    }
+    .panel h2 {
+      text-align: center;
+      margin-top: 0;
+    }
+    .section-title {
+      color: #00ffff;
+      font-weight: bold;
+      margin: 15px 0 10px;
+    }
+    .checkbox-group {
+      margin-bottom: 15px;
+    }
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 5px;
+      border-radius: 5px;
+      margin-bottom: 5px;
+    }
+    .checkbox-group input[type="checkbox"] {
+      margin-right: 10px;
+    }
+    .slider {
+      margin: 5px 0 15px 10px;
+    }
+    .slider label {
+      font-size: 14px;
+    }
+    .slider input[type="range"] {
+      width: 100%;
+    }
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+    }
+    .buff-info {
+      background: rgba(255, 0, 0, 0.1);
+      border-left: 4px solid #ff0000;
+      padding: 10px;
+      margin-top: 20px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 50, 50, 0.95);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      box-shadow: 0 0 10px #ff0000;
+      display: none;
+      z-index: 9999;
+    }
+    #keySection input[type="text"] {
+      width: 90%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+    #keySection button {
+      padding: 10px 20px;
+      background: #00ffcc;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h2>PANNEL</h2>
+
+    <!-- Nhập KEY để mở tính năng -->
+    <div id="keySection">
+      <input type="text" id="keyInput" placeholder="Nhập KEY để mở khóa...">
+      <button onclick="checkKey()">Xác nhận</button>
+    </div>
+
+    <!-- Bắt đầu chức năng chính: ẩn mặc định -->
+    <div id="mainPanel" style="display:none;">
+
+      <div class="section-title">Chức Năng & Chỉ Số</div>
+      <div class="checkbox-group">
+        <label><input type="checkbox" checked onclick="showToast(this)"> Auto Headshot</label>
+        <div class="slider">
+          <label>Độ Chính Xác: <span id="headshotValue">85%</span></label>
+          <input type="range" min="0" max="100" value="85" oninput="updateValue(this, 'headshotValue', '%')">
+        </div>
+
+        <label><input type="checkbox" checked onclick="showToast(this)"> Aim Fire</label>
+        <div class="slider">
+          <label>Sức mạnh Aim: <span id="aimFireValue">70</span></label>
+          <input type="range" min="0" max="100" value="70" oninput="updateValue(this, 'aimFireValue')">
+        </div>
+
+        <label><input type="checkbox" onclick="showToast(this)"> Buff 120FPS</label>
+        <div class="slider">
+          <label>Tần số khung hình: <span id="fpsValue">120Hz</span></label>
+          <input type="range" min="30" max="240" value="120" oninput="updateValue(this, 'fpsValue', 'Hz')">
+        </div>
+
+        <!-- ✅ Thêm chức năng: Ghim Đầu Mạnh -->
+        <label><input type="checkbox" onclick="showToast(this)"> Ghim Đầu Mạnh</label>
+        <div class="slider">
+          <label>Mức Ghim: <span id="ghimHeadValue">90%</span></label>
+          <input type="range" min="0" max="100" value="90" oninput="updateValue(this, 'ghimHeadValue', '%')">
+        </div>
+
+        <!-- ✅ Thêm chức năng: Đạn Thẳng -->
+        <label><input type="checkbox" onclick="showToast(this)"> Đạn Thẳng</label>
+        <div class="slider">
+          <label>Độ Ổn Định: <span id="danThangValue">95%</span></label>
+          <input type="range" min="0" max="100" value="95" oninput="updateValue(this, 'danThangValue', '%')">
+        </div>
+      </div>
+
+      <div class="slider">
+        <label for="aimFov">Aim Fov: <span id="fovValue">120°</span></label>
+        <input type="range" id="aimFov" min="0" max="360" value="120" oninput="updateFov(this.value)">
+        <div class="slider-labels">
+          <span>0°</span>
+          <span>360°</span>
+        </div>
+      </div>
+
+      <div class="section-title">Thông Tin Buff Màn</div>
+      <div class="buff-info">
+        - Độ nhạy màn hình: 100%<br>
+        - Chống rung giật khi kéo tâm<br>
+        - Tăng tốc độ phản hồi cảm ứng<br>
+        - Cân bằng điểm chết (Deadzone fix)<br>
+        - Hỗ trợ kéo tâm mượt trên mọi thiết bị<br>
+        - Ưu tiên hướng đầu, tự động căn vùng head hitbox<br>
+        - Buff FPS: hỗ trợ 90–120FPS nếu thiết bị cho phép
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">KEY không hợp lệ!</div>
+
+  <script>
+    function checkKey() {
+      const key = document.getElementById("keyInput").value.trim();
+      const correctKey = "FF2025VIP";
+      const toast = document.getElementById("toast");
+
+      if (key === correctKey) {
+        document.getElementById("mainPanel").style.display = "block";
+        document.getElementById("keySection").style.display = "none";
+      } else {
+        toast.style.display = "block";
+        setTimeout(() => { toast.style.display = "none"; }, 2000);
+      }
+    }
+
+    function showToast(checkbox) {
+      const toast = document.getElementById('toast');
+      const status = checkbox.checked ? 'Bật' : 'Tắt';
+      toast.innerText = checkbox.parentElement.innerText.trim() + ' - ' + status + ' thành công!';
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 2000);
+    }
+
+    function updateFov(val) {
+      document.getElementById('fovValue').textContent = val + '°';
+    }
+
+    function updateValue(slider, id, suffix = '') {
+      document.getElementById(id).textContent = slider.value + suffix;
+    }
+
+    // ✅ Thêm logic "Ghim Đầu Full Đỏ" & "Đạn Thẳng"
+    let ghimDauManh = false;
+    let danThang = false;
+
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', function () {
+        const label = this.parentElement.innerText.trim();
+
+        if (label.includes('Ghim Đầu Mạnh')) {
+          ghimDauManh = this.checked;
+          if (ghimDauManh) {
+            console.log('🔴 Ghim đầu full đỏ đã được kích hoạt!');
+            document.body.style.filter = 'saturate(1.5) brightness(1.1)';
+          } else {
+            document.body.style.filter = '';
+          }
+        }
+
+        if (label.includes('Đạn Thẳng')) {
+          danThang = this.checked;
+          if (danThang) {
+            console.log('🎯 Đạn thẳng đã được kích hoạt!');
+            document.body.style.boxShadow = 'inset 0 0 50px rgba(0,255,0,0.2)';
+          } else {
+            document.body.style.boxShadow = '';
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
